@@ -6,20 +6,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee                       
 http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
-
-	<!-- http://localhost:8088/JSP_Template_JSTL 주소로 요청이 온 경우 
-		webapp 아래에서 welcome-file 파일을 차례대로 찾습니다. -->
-	<display-name>UserChat</display-name>
 	<welcome-file-list>
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-	<servlet>
-		<servlet-name>UserRegisterServlet</servlet-name>
-		<servlet-class>user.UserRegisterServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>UserRegisterServlet</servlet-name>
-		<url-pattern>/useRegister</url-pattern>
-	</servlet-mapping>
 </web-app>

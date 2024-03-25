@@ -1,20 +1,20 @@
-package user;
+package net.chat.action;
 
 import java.io.IOException;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import net.chat.db.UserDAO;
+import net.coomon.action.ActionForward;
 
-@WebServlet("/UserRegisterServlet")
-public class UserRegisterServlet extends HttpServlet {
-
-	private static final long serialVersionUID = 1L;
+public class UserRegisterServlet implements net.coomon.action.Action {
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public ActionForward excute(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		ActionForward forward = new ActionForward();
+		
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=utf-8");
 		String userID = request.getParameter("userID");
@@ -34,24 +34,34 @@ public class UserRegisterServlet extends HttpServlet {
 			userEmail == null || userEmail.equals("")) {
 			request.getSession().setAttribute("massageType", "오류메시지");
 			request.getSession().setAttribute("messageContent", "비밀번호가 서로 다릅니다.");
-			response.sendRedirect("join.jsp");
-			return;
+			//response.sendRedirect("join.jsp");
+			forward.setRedirect(true);
+			forward.setPath("join.jsp");
+			return forward;
 		}
 		if(!userPassword1.equals(userPassword2)) {
 			request.getSession().setAttribute("messageType", "오류 메시지");
 			request.getSession().setAttribute("messageContent", "비밀번호가 서로 다릅니다.");
-			response.sendRedirect("join.jsp");
-			return;
+			//response.sendRedirect("join.jsp");
+			forward.setRedirect(true);
+			forward.setPath("join.jsp");
+			return forward;
 		}
 		int result = new UserDAO().register(userID, userPassword2, userName, userAge, userGender, userEmail, userProfile);
 		if (result == 1) {
+			request.getSession().setAttribute("userID", userID);
 			request.getSession().setAttribute("messageType", "성공 메시지");
 			request.getSession().setAttribute("messageContent", "회원가입에 성공했습니다.");
-			response.sendRedirect("index.jsp");
+			//response.sendRedirect("index.jsp");
+			forward.setRedirect(true);
+			forward.setPath("index.jsp");
 		} else {
 			request.getSession().setAttribute("messageType", "오류 메시지");
 			request.getSession().setAttribute("messageContent", "이미 존재하는 회원입니다.");
-			response.sendRedirect("join.jsp");
+			//response.sendRedirect("join.jsp");
+			forward.setRedirect(true);
+			forward.setPath("join.jsp");
 		}
+		return forward;
 	}	
 }

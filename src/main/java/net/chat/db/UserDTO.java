@@ -1,4 +1,4 @@
-package user;
+package net.chat.db;
 
 public class UserDTO {
 	

@@ -1,4 +1,4 @@
-package user;
+package net.chat.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +25,7 @@ public class UserDAO {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String SQL = "SELECT * FROM USER WHERE userID = ?";
+		String SQL = "SELECT * FROM CHAT_USER WHERE userID = ?";
 		try {
 			conn = ds.getConnection();
 			pstmt = conn.prepareStatement(SQL);
@@ -57,13 +57,13 @@ public class UserDAO {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String SQL = "SELECT * FROM USER WHERE userID = ?";
+		String SQL = "SELECT * FROM CHAT_USER WHERE userID = ?";
 		try {
 			conn = ds.getConnection();
 			pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1, userID);
 			rs = pstmt.executeQuery();
-			if (rs.next() || userID.equals("")) {
+			if (rs.next()) {
 				return 0; // 이미 존재하는 회원 
 			} else {
 				return 1; // 가입 가능한 회원 아이디 
@@ -88,8 +88,8 @@ public class UserDAO {
 						String userProfile) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String SQL = "INSERT INTO USER VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+		String SQL = "INSERT INTO CHAT_USER VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try {
 			conn = ds.getConnection();
 			pstmt = conn.prepareStatement(SQL);
@@ -100,17 +100,11 @@ public class UserDAO {
 			pstmt.setString(5, userGender);
 			pstmt.setString(6, userEmail);
 			pstmt.setString(7, userProfile);
-			rs = pstmt.executeQuery();
-			if (rs.next() || userID.equals("")) {
-				return 0; // 이미 존재하는 회원 
-			} else {
-				return 1; // 가입 가능한 회원 아이디 
-			}
+			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (rs != null) rs.close();
 				if (pstmt != null) pstmt.close();
 				if (conn != null) conn.close();
 			} catch (Exception e) {
